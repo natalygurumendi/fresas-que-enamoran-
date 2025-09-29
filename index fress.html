@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fresas frescas con crema artesanal en Guayaquil. Postres que conquistan tu corazón. ¡Haz tu pedido en línea!">
+  <title>Fresas que Enamoran</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome para íconos (sin integrity para evitar error) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <style>
+    /* -----------------------------
+       Estilos generales y colores
+    ------------------------------ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rojo-fresa: #E91E63;
+      --blanco-crema: #FFF8F5;
+      --verde-hoja: #4CAF50;
+      --texto-oscuro: #2C2C2C;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--blanco-crema);
+      color: var(--texto-oscuro);
+      overflow-x: hidden;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .floating-hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .heart {
+      position: absolute;
+      color: var(--rojo-fresa);
+      font-size: 20px;
+      animation: float 4s ease-in-out infinite;
+      opacity: 0.3;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255,248,245,0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 20px rgba(233,30,99,0.1);
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--rojo-fresa);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--texto-oscuro);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--rojo-fresa); }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(233,30,99,0.1) 0%, rgba(255,248,245,0.9) 100%),
+                  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="strawberry" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="20" fill="%23E91E63" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23strawberry)"/></svg>');
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 0 2rem;
+    }
+    .hero-content { max-width: 800px; animation: fadeInUp 1s ease-out; }
+    .hero h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: var(--rojo-fresa);
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    .hero .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(45deg, var(--rojo-fresa), #FF4081);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 25px rgba(233,30,99,0.3);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(233,30,99,0.4);
+    }
+
+    /* Banner Promoción */
+    .promo-banner {
+      background: var(--verde-hoja);
+      color: white;
+      text-align: center;
+      padding: 0.8rem;
+      font-weight: 600;
+      animation: fadeInUp 1.2s ease-out;
+      margin-top: 70px;
+    }
+
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .section h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      color: var(--rojo-fresa);
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .historia p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+    .frase-emotiva {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--rojo-fresa);
+      font-weight: 600;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .menu-item {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+    .menu-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(233,30,99,0.15);
+    }
+    .menu-item .icon {
+      font-size: 3rem;
+      color: var(--rojo-fresa);
+      margin-bottom: 1rem;
+    }
+    .menu-item h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--rojo-fresa);
+    }
+
+    .contact-form {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--rojo-fresa);
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .contact-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .contact-card i {
+      font-size: 2.5rem;
+      color: var(--rojo-fresa);
+      margin-bottom: 1rem;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .testimonial {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .testimonial::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--rojo-fresa);
+      position: absolute;
+      top: 10px; left: 20px;
+      opacity: 0.3;
+    }
+    .testimonial-text { font-style: italic; margin-bottom: 1rem; padding-top: 1rem; }
+    .testimonial-author { font-weight: 600; color: var(--rojo-fresa); }
+
+    footer {
+      background: var(--texto-oscuro);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem 2rem;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px; height: 50px;
+      background: var(--rojo-fresa);
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+    .social-links a:hover { transform: scale(1.1); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .section { padding: 3rem 1rem; }
+      .hero { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-hearts" id="floatingHearts"></div>
+
+  <header>
+    <nav>
+      <a href="#" class="logo">🍓 Fresas que Enamoran</a>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#historia">Historia</a></li>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#pedidos">Pedidos</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="promo-banner">
+    🎉 ¡PROMOCIÓN ESPECIAL! 3 Topis todos los viernes - ¡No te lo pierdas! 🎉
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h1>Fresas que Enamoran</h1>
+      <p class="subtitle">El postre que conquista tu corazón</p>
+      <a href="#pedidos" class="cta-button">Haz tu pedido ❤️</a>
+    </div>
+  </section>
+
+  <!-- Historia -->
+  <section class="section historia" id="historia">
+    <h2>Nuestra Historia</h2>
+    <p>Seleccionamos cuidadosamente las fresas más jugosas y frescas de la región, combinándolas con nuestra crema artesanal elaborada de manera tradicional.</p>
+    <p>Cada porción es preparada con amor y dedicación, siguiendo procesos naturales que realzan el sabor auténtico de cada ingrediente.</p>
+    <p class="frase-emotiva">"Cada bocado es amor a primera vista" 💕</p>
+  </section>
+
+  <!-- Menú -->
+  <section class="section" id="menu">
+    <h2>Nuestro Menú</h2>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="icon">🍓</div>
+        <h3>Fresas con Crema Clásica</h3>
+        <p>La combinación perfecta de fresas frescas con nuestra crema artesanal tradicional. Pura dulzura en cada cucharada.</p>
+      </div>
+      <div class="menu-item">
+        <div class="icon">🍫</div>
+        <h3>Fresas con Chocolate</h3>
+        <p>Fresas premium bañadas en chocolate belga y acompañadas de crema batida. Una experiencia celestial.</p>
+      </div>
+      <div class="menu-item">
+        <div class="icon">✨</div>
+        <h3>Fresas con Toppings</h3>
+        <p>Personaliza tu postre con almendras, granola, chispas de colores y más. ¡Crea tu combinación perfecta!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pedidos -->
+  <section class="section" id="pedidos">
+    <h2>Haz tu Pedido</h2>
+    <div class="contact-form">
+      <form>
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" required>
+        </div>
+        <div class="form-group">
+          <label for="producto">Selecciona tu postre</label>
+          <select id="producto" name="producto" required>
+            <option value="">Elige una opción</option>
+            <option value="clasica">Fresas con Crema Clásica</option>
+            <option value="chocolate">Fresas con Chocolate</option>
+            <option value="toppings">Fresas con Toppings</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cantidad">Cantidad</label>
+          <input type="number" id="cantidad" name="cantidad" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+          <label for="comentarios">Comentarios especiales</label>
+          <textarea id="comentarios" name="comentarios" rows="3" placeholder="¿Alguna preferencia especial?"></textarea>
+        </div>
+        <button type="submit" class="cta-button">Enviar Pedido 🍓</button>
+      </form>
+    </div>
+
+    <div class="contact-info">
+      <div class="contact-card">
+        <i class="fab fa-whatsapp"></i>
+        <h3>WhatsApp</h3>
+        <p>+593 967825331</p>
+        <p>Respuesta inmediata</p>
+      </div>
+      <div class="contact-card">
+        <i class="fab fa-instagram"></i>
+        <h3>Instagram</h3>
+        <p>@Fresasqueenamoran</p>
+        <p>Síguenos para ofertas especiales</p>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Ubicación</h3>
+        <p>Guayaquil,yaguachi, Ecuador</p>
+        <p>Delivery disponible</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section class="section" id="testimonios">
+    <h2>Lo que Dicen Nuestros Clientes</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p class="testimonial-text">¡Increíbles! Las fresas son súper frescas y la crema es deliciosa. Mi postre favorito de toda la ciudad.</p>
+        <p class="testimonial-author">- María González</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">El servicio es excelente y la calidad es de primera. Siempre que puedo hago un pedido para mi familia.</p>
+        <p class="testimonial-author">- Carlos Méndez</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">¡Una verdadera experiencia de amor a primera vista! No puedo dejar de pedir cada fin de semana.</p>
+        <p class="testimonial-author">- Ana Torres</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="social-links">
+      <a href="https://wa.me/593967825331" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.instagram.com/fresasqueenamora?igsh=MTJ0NjZjNGtvdWxvOA==" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:contacto@fresasqueenamoran.com" aria-label="Correo"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p>&copy; 2025 Fresas que Enamoran. Todos los derechos reservados. 🍓</p>
+  </footer>
+
+  <script>
+    // Animación de corazones flotantes
+    const heartsContainer = document.getElementById('floatingHearts');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+      heart.innerHTML = '❤';
+      heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 500);
+
+    // Animación de secciones al hacer scroll
+    const sections = document.querySelectorAll('.section');
+    function checkSections() {
+      const triggerBottom = window.innerHeight * 0.8;
+      sections.forEach(section => {
+        const boxTop = section.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+          section.style.opacity = 1;
+          section.style.transform = 'translateY(0)';
+        }
+      });
+    }
+    window.addEventListener('scroll', checkSections);
+    checkSections();
+
+    // Simulación de envío de formulario
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('¡Gracias por tu pedido! Nos pondremos en contacto contigo pronto 🍓');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
